@@ -1,0 +1,85 @@
+---
+title: "Assignment B1 LM"
+author: "Liam Mullins"
+date: "2022-11-03"
+output: github_document
+---
+
+# Exercise 1: Make a Function
+It is helpful to create a function where we can compare the means of two numerical variables. This can help one to determine which mean is greater. The function below allows for two means to be compared, by subtracting the second mean from the first. NA values are excluded.
+
+```{r}
+mean_vs_mean <- function(x, y, na.rm = TRUE, ...) {
+  if (missing(y)) {
+    stop("Missing 'y' variable. Double check your input!")
+  }
+  mean(x, na.rm = na.rm, ...) - mean(y, na.rm = na.rm,  ...)}
+
+#'Difference in Means
+#'
+#'@description
+#'This function calculates the difference between the sample mean of one numeric vector and the sample mean of another numeric vector. 
+#'
+#'@param x An R object. Refers to the numeric vector in which the 1st mean is to be calculated from. *x* was named due to common usage in R and mathematical formulas.
+#'@param y An R object. Refers to the numeric vector in which the 2nd mean is to be calculated from. *y* was named as it commonly refers to a second variable in mathetics, thus, it is useful to refer to the 2nd mean in this function.
+#'@param na.rm A logical evaluating to TRUE or FALSE indicating whether NA values should be stripped before the computation proceeds. Note, that the default is TRUE for this function and NA values are stripped.
+#'@param ... Further arguments passed to or from other methods.
+#'@returns
+#'A single numeric value representing the difference when the 2nd mean is subtracted from the 1st.
+#'
+```
+
+# Exercise 2: Document your Function
+Roxygen2 tags were used to document the function in the same code chunk where it was first made above. These tags help to provide information about what the function is, how it works, and what ir returns.
+
+# Exercise 3: Examples
+Let's use this function with 3 different examples.
+
+First, we  can test this function by loading the library(palmerpenguins), and using the *penguins* dataset.
+```{r}
+library(palmerpenguins)
+mean_vs_mean(penguins$bill_length_mm, penguins$bill_depth_mm)
+```
+
+After comparing the mean bill_length_mm to bill_depth_mm, we can see this function worked and produced an output of 26.77076. This tells me that the mean bill_length mm is larger than the mean bill_depth_mm by 26.77076. This is useful information! If my answer were negative, I would know the opposite were true.
+
+Now, we will load the library *datateachr*. The dataset *parking_meters* can be examined.
+
+```{r}
+#The head() function will allow for a peek into this dataset.
+library(datateachr)
+head(parking_meters)
+```
+Now, we can test the function to compare the mean parking rates in Vancouver between different dates/times. For example, we might want to see if the mean rate Mon-Fri from 9AM to 6PM is less than the mean Sat rate at the same time.
+
+Inputting the columns that correspond to this into the function will result in an error. That is because the rates listed in this dataset are character variables as they use currency notation. This function requires numerical variables to work.
+```{r, error=TRUE}
+mean_vs_mean(parking_meters$r_sa_9a_6p, parking_meters$r_mf_9a_6p)
+```
+
+Let's load the dataset *cancer_sanmple*
+```{r}
+head(cancer_sample)
+#Perhaps we want to see how the mean "radius_mean" compares to the mean "radius_worst"
+mean_vs_mean(cancer_sample$radius_mean, cancer_sample$radius_worst)
+#This produces a final result of -2.141898. 
+```
+This means that the mean radius_mean is slightly less (-2.141898) than the mean radius_worst. This information may be beneficial to clinicians analysing this data. 
+# Exercise 4: Test the Function
+A good way of checking whether a function is working is using a formal "yes or no" check from the *testthat*
+package. 
+
+```{r}
+library(testthat)
+
+
+test_that("mean_vs_mean works", {
+  expect_equal(mean_vs_mean(c(2, 4, 6), c(1, 2, 3)), 2) 
+  expect_equal(mean_vs_mean(c(5, 10, 15), c(5, NA, 15)), 0)
+  expect_error(mean_vs_mean(vancouver_trees$diameter), "Missing 'y' variable. Double check your input!")
+    })
+ 
+               
+```
+
+
