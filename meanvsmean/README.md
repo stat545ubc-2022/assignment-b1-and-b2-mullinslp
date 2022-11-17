@@ -17,7 +17,7 @@ directly included.
 You can install the development version of meanvsmean like so:
 
 ``` r
-# install_github("stat545ubc-2022/assignment-b1-and-b2-mullinslp/meanvsmean", ref - "0.1.0")
+# install_github("stat545ubc-2022/assignment-b1-and-b2-mullinslp/meanvsmean", ref = "0.1.0")
 ```
 
 ## Example
